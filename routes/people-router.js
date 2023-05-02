@@ -1,29 +1,22 @@
-// ./routes/people-router.js
-
-///////////////////////////////
 // DEPENDENCIES
-////////////////////////////////
-
 const express = require('express')
 const router = express.Router()
-
-///////////////////////////////
+const peopleCtrl = require('../controllers/people-controller')
 // ROUTES
-////////////////////////////////
 
 // PEOPLE INDEX ROUTE
-router.get("/", async (req, res) => {
-	res.status(200).json({message: "people index route"})
-});
-
-
+router.get('/', peopleCtrl.index)
 
 // PEOPLE CREATE ROUTE
-router.post("/", async (req, res) =>  {
-	res.status(201).json({message: "people create route"})
-});
+router.post('/', peopleCtrl.create)
 
-router.delete("/:id", peopleCtrl.delete);
-router.put("/:id", peopleCtrl.update);
+// PEOPLE SHOW ROUTE
+router.get('/:id', peopleCtrl.getOne)
+
+// PEOPLE DESTROY ROUTE
+router.delete('/:id', peopleCtrl.delete)
+
+// PEOPLE UPDATE ROUTE
+router.put('/:id', peopleCtrl.update)
+
 module.exports = router
-
