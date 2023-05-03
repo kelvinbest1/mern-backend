@@ -1,19 +1,33 @@
-///////////////////////////////
-// DEPENDENCIES
-////////////////////////////////
+// DEPENDENCIES 
+require('dotenv').config()
+require('./config/db.connection')
 
-// pull PORT from .env, give default value of 4000
-const mongoose = require('mongoose');
-const {MONGODB_URI} = process.env
+const express = require('express')
+const morgan = require('morgan')
+const cors = require('cors')
 
-///////////////////////////////
-// DATABASE CONNECTION
-////////////////////////////////
-mongoose.set('strictQuery', true);
-mongoose.connect(MONGODB_URI)
+const peopleRouter = require('./routes/people-router')
 
-// Connection Events
-mongoose.connection
-  .on("open", () => console.log("You are connected to mongoose"))
-  .on("close", () => console.log("You are disconnected from mongoose"))
-  .on("error", (error) => console.log(error));
+
+// CONFIGURATION
+const app = express()
+
+const { PORT } = process.env 
+
+
+// MIDDLEWARE 
+app.use(express.urlencoded({extended: true}))
+app.use(express.json())
+
+app.use(cors())
+app.use(morgan("dev"))
+
+// ROUTER MIDDLEWARE
+app.use('/people', peopleRouter)
+
+// HOME ROUTE 
+app.get('/', (req,res)=>res.send('hello react'))
+
+
+// SERVER INSTANCE
+app.listen(PORT, ()=>console.log(`Listening on PORT: ${PORT}`))
